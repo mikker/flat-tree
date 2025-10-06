@@ -1,5 +1,6 @@
 exports.fullRoots = function (index, result) {
-  if (index & 1) throw new Error('You can only look up roots for depth(0) blocks')
+  if (index & 1)
+    throw new Error('You can only look up roots for depth(0) blocks')
   if (!result) result = []
 
   index /= 2
@@ -18,7 +19,8 @@ exports.fullRoots = function (index, result) {
 }
 
 exports.futureRoots = function (index, result) {
-  if (index & 1) throw new Error('You can only look up future roots for depth(0) blocks')
+  if (index & 1)
+    throw new Error('You can only look up future roots for depth(0) blocks')
   if (!result) result = []
 
   let factor = 1
@@ -32,11 +34,11 @@ exports.futureRoots = function (index, result) {
   let pos = factor / 2 - 1
 
   // while its not a full tree
-  while ((pos + factor / 2 - 1) !== index) {
+  while (pos + factor / 2 - 1 !== index) {
     pos += factor
 
     // read too far, to to left child
-    while ((pos + factor / 2 - 1) > index) {
+    while (pos + factor / 2 - 1 > index) {
       factor /= 2
       pos -= factor / 2
     }
@@ -126,7 +128,7 @@ exports.leftChild = function (index, depth) {
 exports.rightChild = function (index, depth) {
   if (!(index & 1)) return -1
   if (!depth) depth = exports.depth(index)
-  return exports.index(depth - 1, 1 + (exports.offset(index, depth) * 2))
+  return exports.index(depth - 1, 1 + exports.offset(index, depth) * 2)
 }
 
 exports.children = function (index, depth) {
@@ -202,15 +204,15 @@ exports.iterator = function (index) {
   return ite
 }
 
-function twoPow (n) {
-  return n < 31 ? 1 << n : ((1 << 30) * (1 << (n - 30)))
+function twoPow(n) {
+  return n < 31 ? 1 << n : (1 << 30) * (1 << (n - 30))
 }
 
-function rightShift (n) {
+function rightShift(n) {
   return (n - (n & 1)) / 2
 }
 
-function Iterator () {
+function Iterator() {
   this.index = 0
   this.offset = 0
   this.factor = 0
@@ -240,9 +242,10 @@ Iterator.prototype.isRoot = function (length) {
   if (length < currentLength) return false
 
   const factor = this.factor * 2
-  const index = (this.offset & 1)
-    ? this.index - this.factor / 2
-    : this.index + this.factor / 2
+  const index =
+    this.offset & 1
+      ? this.index - this.factor / 2
+      : this.index + this.factor / 2
 
   const parentLength = 1 + (index + factor / 2 - 1) / 2
   return parentLength > length
@@ -250,9 +253,9 @@ Iterator.prototype.isRoot = function (length) {
 
 Iterator.prototype.contains = function (index) {
   return index > this.index
-    ? index < (this.index + this.factor / 2)
+    ? index < this.index + this.factor / 2
     : index < this.index
-      ? index > (this.index - this.factor / 2)
+      ? index > this.index - this.factor / 2
       : true
 }
 
