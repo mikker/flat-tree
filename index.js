@@ -1,6 +1,5 @@
 exports.fullRoots = function (index, result) {
-  if (index & 1)
-    throw new Error('You can only look up roots for depth(0) blocks')
+  if (index & 1) throw new Error('You can only look up roots for depth(0) blocks')
   if (!result) result = []
 
   index /= 2
@@ -19,8 +18,7 @@ exports.fullRoots = function (index, result) {
 }
 
 exports.futureRoots = function (index, result) {
-  if (index & 1)
-    throw new Error('You can only look up future roots for depth(0) blocks')
+  if (index & 1) throw new Error('You can only look up future roots for depth(0) blocks')
   if (!result) result = []
 
   let factor = 1
@@ -137,10 +135,7 @@ exports.children = function (index, depth) {
   if (!depth) depth = exports.depth(index)
   const offset = exports.offset(index, depth) * 2
 
-  return [
-    exports.index(depth - 1, offset),
-    exports.index(depth - 1, offset + 1)
-  ]
+  return [exports.index(depth - 1, offset), exports.index(depth - 1, offset + 1)]
 }
 
 exports.leftSpan = function (index, depth) {
@@ -242,10 +237,7 @@ Iterator.prototype.isRoot = function (length) {
   if (length < currentLength) return false
 
   const factor = this.factor * 2
-  const index =
-    this.offset & 1
-      ? this.index - this.factor / 2
-      : this.index + this.factor / 2
+  const index = this.offset & 1 ? this.index - this.factor / 2 : this.index + this.factor / 2
 
   const parentLength = 1 + (index + factor / 2 - 1) / 2
   return parentLength > length
